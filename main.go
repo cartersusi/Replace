@@ -25,7 +25,10 @@ func confirm_cmd(cmd string) bool {
 		if attempts >= MAX_ATTEMPTS {
 			sh.Error("Too many attempts", true)
 			return false
+		} else if attempts > MAX_ATTEMPTS/2 {
+			sh.Warning(fmt.Sprintf("You have %d attempts remaining", MAX_ATTEMPTS-attempts))
 		}
+
 		fmt.Printf("\n%s\n\tAre you sure you want to run this command? (y/n): ", cmd)
 		input, err := reader.ReadString('\n')
 		if err != nil {
