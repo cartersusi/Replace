@@ -23,7 +23,7 @@ func confirm_cmd(cmd string) bool {
 
 	for {
 		if attempts >= MAX_ATTEMPTS {
-			sh.Error("Too many attempts")
+			sh.Error("Too many attempts", true)
 			return false
 		}
 		fmt.Printf("\n%s\n\tAre you sure you want to run this command? (y/n): ", cmd)
@@ -76,13 +76,12 @@ func main() {
 	//grep -rl 'this-text' ./ | xargs -I {} sed -i '' 's/this-text/this-text/g' {}
 	cmd := fmt.Sprintf("grep -rl '%s' %s | xargs -I {} sed -i '' 's/%s/%s/g' {}", replaceString, directory, replaceString, withString)
 	if !confirm_cmd(cmd) {
-		sh.Error("Bad Command. Exiting...")
-		return
+		sh.Error("Bad Command. Exiting...", true)
 	}
 
 	out, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
-		sh.Error(err.Error())
+		sh.Error(err.Error(), true)
 	}
 
 	out_msg := fmt.Sprintf("DONE: Replaced `%s` with `%s` in `%s`", replaceString, withString, directory)
